@@ -1,42 +1,46 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const api = express.Router();
-module.exports = api;
-const db = require(`./db-inmemory`);
+const user = [
+        {"email": "up817852@myport.ac.uk", "role": ["admin", "user"]},
+        {"email": "clarkleo20@gmail.com", "role": ["user"]}
+];
 
-let loginToken = false;
+let request = []
 
-api.get('/:random', (req, res) => {
-    
-    if(!loginToken){
-        console.log("No Token")
-        res.sendStatus(401)
-    }
-    else{
-        console.log("random");
-    }
-});
+module.exports.randomNumber = async (id) => {
+    return Math.random().toString();
+};
 
-api.get('/:user/roles', bodyParser.text(), (req, res) => {
-    console.log("roles")
-});
+module.exports.roles = async (email) => {
+    for (var i = 0; i < user.length; i++) {
+        if (user[i].email === email) {
+          return user[i].role;
+        }
+      }
+}
 
-api.post('/:user/request', bodyParser.text(), (req, res) => {
-    console.log("request")
-});
+//request access
+module.exports.accessRequest = async (email) => {
+    console.log("request");
+    request.email = email
+    console.log(request)
+};
 
-api.get('/:users', bodyParser.text(), (req, res) => {
-    console.log("users")
-});
+//get user list
+module.exports.userList = async (id) => {
+    console.log(user)
+    return Object.keys(user)
+};
 
-api.get('/:user/request', bodyParser.text(), (req, res) => {
-    console.log("request list")
-});
+// get user request list
+module.exports.userRequest = async (id) => {
+    console.log("user request list")
+    console.log(request.email)
+    return user.email
+};
 
-api.post('/:user/aprove', bodyParser.text(), (req, res) => {
-    console.log("aprove user")
-});
+module.exports.aprove = async (id) => {
+    console.log("aprove");
+};
 
-api.delete('/:user/user1@a.b', bodyParser.text(), (req, res) => {
-    console.log("delete")
-});
+module.exports.delete = async (id) => {
+    console.log("users");
+};
