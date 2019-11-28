@@ -26,15 +26,14 @@ module.exports.accessRequest = async (email) => {
 
 //get user list
 module.exports.userList = async (id) => {
-    console.log(user)
-    return Object.keys(user)
+    console.log(user.length)
+    return JSON.stringify(user)
 };
 
 // get user request list
 module.exports.userRequest = async (id) => {
     console.log("user request list")
-    console.log(request.email)
-    return user.email
+    return user[0].email
 };
 
 module.exports.aprove = async (id) => {

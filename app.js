@@ -60,9 +60,6 @@ app.get('/api/user/request', async (req, res) => {
   }
 });
 
-
-
-
 app.post('/api/user/aprove', bodyParser.text(), (req, res) => {
   try {
     let id = "2"
