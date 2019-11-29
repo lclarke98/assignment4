@@ -16,8 +16,8 @@ res.send('Hello ' + (req.user.displayName || 'user without a name') + '!');
 
 app.get('/api/random', async (req, res) => {
   try {
-    let id = "2"
-    res.send(await api.randomNumber(id));
+    res.setHeader('content-type', 'text/plain');
+    res.send(await api.randomNumber());
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -35,6 +35,7 @@ app.get('/api/user/roles', async (req, res) => {
 
 app.post('/api/user/request', async (req, res) => {
   try {
+    res.setHeader('content-type', 'application/json');
     res.send(await api.accessRequest(req.user.emails[0].value));
   } catch (e) {
     console.error(e);
