@@ -45,7 +45,7 @@ app.post('/api/user/request', async (req, res) => {
 
 app.get('/api/users', async (req, res) => {
   try {
-    res.send(await api.userList());
+    res.json(await api.userList());
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
