@@ -1,54 +1,89 @@
-let users = [
-  {"email": "up817852@myport.ac.uk", "role": ['admin', 'user']}
-]
-let request = []
+const express = require('express');
+const api = express.Router();
+const bodyParser = require('body-parser');
+module.exports = api;
 
-module.exports.randomNumber = async (id) => {
-    return JSON.stringify(Math.random());
-};
+let db = require('./db-inmemory')
 
-module.exports.roles = async (email) => {
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].email === email) {
-          return users[i].role;
-        }
-      }
-}
+api.get('/random', async (req, res) => {
+  try {
+    let role = db.roles(req.user.emails[0].value)
+    console.log(role);
+    if(role.includes("admin") ){
+      res.set('content-type', 'text/plain');
+      res.status(200).json(await db.randomNumber());
+    }else{
+      res.sendStatus(403)
+    }
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
 
-//request access
-module.exports.accessRequest = async (email) => {
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].email === email) {
-          console.log("alreasy have access")
-        }
-        else{
-            request.email = email
-            console.log("request sent")
-            console.log(email)
-        }
-      }
-    console.log("request");
-};
-ß
-//get user list
-module.exports.userList = async () => {
-  console.log(users)
-  return users;
-};
+api.get('/user/roles', async (req, res) => {
+  try {
+    res.json(await db.roles(req.user.emails[0].value));
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
 
-// get user request list
-module.exports.userRequest = async () => {
-  return request
-};
+api.post('/user/request', async (req, res) => {
+  try {
+    res.set('content-type', 'application/json');
+    res.send(await db.accessRequest(req.user.emails[0].value));
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
 
-module.exports.aprove = async () => {
-    console.log("aprove");
-};
+api.get('/users', async (req, res) => {
+  try {
+    if(db.roles(req.user.emails[0].value).includes("admin")){
+      res.set('content-type', 'application/json');
+      res.json(await db.userList());
+    }else{
+      res.sendStatus(403);
+    }
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
 
-module.exports.delete = async (email) => {
-    for (var i = 0; i < user.length; i++) {
-        if (user[i].email === email) {
-          user[i].role.pop;
-        }
-      }
-};
+api.get('/user/request', async (req, res) => {
+  try {
+    if(db.roles(req.user.emails[0].value).includes("admin")){
+      res.set('content-type', 'application/json');
+      res.json(await db.userRequest());
+    }else{
+      res.sendStatus(403);
+    }
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
+
+api.post('/user/aprove', bodyParser.text(), (req, res) => {
+  try {
+    let id = "2"
+    res.send(db.aprove(id));
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
+
+api.delete('/user/user1@a.b', bodyParser.text(), (req, res) => {
+  try {
+    let id = "2"
+    res.send(db.delete(id));
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
