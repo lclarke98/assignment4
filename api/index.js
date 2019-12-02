@@ -5,21 +5,18 @@ module.exports = api;
 
 let db = require('./db-inmemory')
 
+//done
 api.get('/random', async (req, res) => {
   try {
-    let role = db.roles(req.user.emails[0].value)
-    if(role.includes("admin") || role.includes("user") ){
-      res.set('content-type', 'text/plain');
-      res.status(200).json(await db.randomNumber());
-    }else{
-      res.sendStatus(403)
-    }
+    res.set('content-type', 'text/plain');
+    res.send(await db.randomNumber(req.user.emails[0].value));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
   }
 });
 
+//done
 api.get('/user/roles', async (req, res) => {
   try {
     res.json(await db.roles(req.user.emails[0].value));
@@ -29,6 +26,7 @@ api.get('/user/roles', async (req, res) => {
   }
 });
 
+//done
 api.post('/user/request', async (req, res) => {
   try {
     res.set('content-type', 'application/json');
@@ -39,14 +37,11 @@ api.post('/user/request', async (req, res) => {
   }
 });
 
+
 api.get('/users', async (req, res) => {
   try {
-    if(db.roles(req.user.emails[0].value).includes("admin")){
       res.set('content-type', 'application/json');
-      res.json(await db.userList());
-    }else{
-      res.sendStatus(403);
-    }
+      res.send(await db.userList(req.user.emails[0].value));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -55,12 +50,8 @@ api.get('/users', async (req, res) => {
 
 api.get('/user/request', async (req, res) => {
   try {
-    if(db.roles(req.user.emails[0].value).includes("admin")){
       res.set('content-type', 'application/json');
-      res.json(await db.userRequest());
-    }else{
-      res.sendStatus(403);
-    }
+      res.send(await db.userRequest(req.user.emails[0].value));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -70,12 +61,9 @@ api.get('/user/request', async (req, res) => {
 //-------------------------------------------------------------
 api.post('/user/approve', bodyParser.text(), async (req, res) => {
   try {
-    if (db.roles(req.user.emails[0].value).includes("admin")) {
       res.set('content-type', 'application/json');
-      res.status(200).json(await db.aprove(req.body));
-    } else {
-      res.sendStatus(403);
-    }
+      res.send(await db.aprove(req.user.emails[0].value,req.body));
+
   }
   catch (e) {
     res.sendStatus(500);
@@ -85,12 +73,8 @@ api.post('/user/approve', bodyParser.text(), async (req, res) => {
 
 api.delete('/user/:email', bodyParser.text(), (req, res) => {
   try {
-    if (db.roles(req.user.emails[0].value).includes("admin")) {
-      db.delete(req.params.email);
+      db.delete(req.user.emails[0].value, req.params.email);
       res.sendStatus(204)
-    } else {
-      res.sendStatus(403);
-    }
   }
   catch (e) {
     res.sendStatus(500);
