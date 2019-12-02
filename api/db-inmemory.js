@@ -12,6 +12,7 @@ function getRole(email){
   return [];
 }
 
+//Returns a random number to admin and users
 module.exports.randomNumber = async (email) => {
     if(getRole(email).includes("admin") || getRole(email).includes("user") ){
       return JSON.stringify(Math.random());
@@ -20,6 +21,7 @@ module.exports.randomNumber = async (email) => {
     }
 };
 
+//Returns the roles of the current user
 module.exports.roles = (email) => {
   for (let i = 0; i < users.length; i++) {
     if (users[i].email == email) {
@@ -29,7 +31,7 @@ module.exports.roles = (email) => {
   return [];
 };
 
-//request access
+//Adds a request to the db
 module.exports.accessRequest = async (email) => {
     for (var i = 0; i < users.length; i++) {
         if (users[i].email === email) {
@@ -44,7 +46,7 @@ module.exports.accessRequest = async (email) => {
       }
 };
 
-//get user list
+//Returns the list of registered users
 module.exports.userList = async (email) => {
   if(getRole(email).includes("admin")){
     return JSON.stringify(users);
@@ -53,7 +55,7 @@ module.exports.userList = async (email) => {
   }
 };
 
-// get user request list
+//Returns the list of access requests
 module.exports.userRequest = async (email) => {
   if(getRole(email).includes("admin")){
     return JSON.stringify(request);
@@ -62,6 +64,7 @@ module.exports.userRequest = async (email) => {
   }
 };
 
+//Approves an access request
 module.exports.aprove = async (admin, email) => {
   if(getRole(admin).includes("admin")){
     let reqIndex = request.indexOf(email);
@@ -78,6 +81,7 @@ module.exports.aprove = async (admin, email) => {
   }
 };
 
+//Deletes a selected user
 module.exports.delete = async (admin, email) => {
       if(getRole(admin).includes("admin")){
         for (var i = 0; i < users.length; i++) {
