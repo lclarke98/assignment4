@@ -3,6 +3,7 @@ let users = [
   ]
 let request = []
 
+//Function to verify if the user is admin
 function getRole(email){
   for (let i = 0; i < users.length; i++) {
     if (users[i].email == email) {
