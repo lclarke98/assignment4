@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const GoogleAuth = require('simple-google-openid');
 app.use(express.static('static', { extensions: ['html'] }));
-app.use(GoogleAuth('849096798416-28vsr2gsrth3svbaj8920c6naqgalb27.apps.googleusercontent.com'));
+app.use(GoogleAuth('849096798416-3fcs1gjvb3jfn95fb4bisl3j1fajdaaf.apps.googleusercontent.com'));
 // return 'Not authorized' if we don't have a user
 app.use('/api', GoogleAuth.guardMiddleware(),require('./api'));
 
